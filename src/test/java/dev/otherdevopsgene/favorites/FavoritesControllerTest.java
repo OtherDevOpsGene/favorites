@@ -24,8 +24,8 @@ class FavoritesControllerTest {
     mvc.perform(MockMvcRequestBuilders.get("/").accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string(startsWith("Hello, World! The current time is")))
-        .andExpect(content().string(containsString("My name is Sneewittchen")))
-        .andExpect(content().string(containsString("My favorite fruits are apples")))
-        .andExpect(content().string(containsString("My favorite color is white")));
+        .andExpect(content().string(containsString("My name is Kirthi")))
+        .andExpect(content().string(containsString("My favorite fruits are Berries")))
+        .andExpect(content().string(containsString("My favorite color is Blue")));
   }
 }
