@@ -239,6 +239,34 @@ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
 
 Scan the bigger version of the image (`otherdevopsgene/favorites:big`) and compare the results.
 
+## Exercise: Push our image
+
+Login to our ECR registry.
+
+```shell
+aws ecr get-login-password --region us-east-2 | \
+  docker login --username AWS \
+  --password-stdin 732829343588.dkr.ecr.us-east-2.amazonaws.com
+```
+
+Find our image ID.
+
+```shell
+docker images
+```
+
+Tag our image for the ECR repository, using the appropriate image ID and a unique tag.
+
+```shell
+docker tag imageID 732829343588.dkr.ecr.us-east-2.amazonaws.com/favorites:unique
+```
+
+Push our image.
+
+```shell
+docker push 732829343588.dkr.ecr.us-east-2.amazonaws.com/favorites:unique
+```
+
 ## Exercise: My first Terraform server
 
 Change to the `~/environments/favorites/extras/terraform-example` directory.
@@ -291,3 +319,33 @@ In the terminal, run the `surprise.yaml` playbook, which is similar to what Gene
 ```shell
 ansible-playbook surprise.yaml
 ```
+
+## Exercise: Deploy our favorites app to k8s
+
+Create a deployment. Replace `unique` in 2 places with something, well, unique. 
+
+```shell
+kubectl create deployment favorites-unique \
+  --image=732829343588.dkr.ecr.us-east-2.amazonaws.com/favorites:unique
+```
+
+View the deployment.
+
+```shell
+kubectl describe deployment favorites-unique
+```
+
+Expose it to the outside world.
+
+```shell
+kubectl expose deployment/ favorites-unique --type=LoadBalancer \
+  --name=favorites-unique-service --port 8080
+```
+
+Get the outside address (`LoadBalancer Ingress`).
+
+```shell
+kubectl describe service favorites-unique-service
+```
+
+Visit in a browser, using `http`.
